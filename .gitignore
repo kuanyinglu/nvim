@@ -1,2 +1,4 @@
 undodir/
 plugged/
+autoload/plug.vim
+/.netrwhist

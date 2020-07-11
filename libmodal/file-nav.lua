@@ -8,7 +8,9 @@ local _COMBOS = {
         h = 'normal! h',
         l = 'normal! l',
         y = 'normal! y',
-        p = 'normal! p'
+        p = 'normal! p',
+        s = 'EasyMotion',
+        S = 'EasyMotionW'
 }
 
 local function _fileNavMode()
