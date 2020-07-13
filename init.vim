@@ -38,7 +38,10 @@ let g:ale_fix_on_save = 1
 let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
 
+noremap s <Plug>(easymotion-db-f)
+nnoremap s <Plug>(easymotion-db-f)
 command! EasyMotion call EasyMotion#S(1,0,2)
+command! EasyMotionX call EasyMotion#S(1,1,2)
 command! EasyMotionW call EasyMotion#OverwinF(1)
 
 command! FileNavMode execute 'luafile' stdpath('config') . '/libmodal/file-nav.lua'

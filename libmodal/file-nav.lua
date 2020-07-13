@@ -9,6 +9,9 @@ local _COMBOS = {
         l = 'normal! l',
         y = 'normal! y',
         p = 'normal! p',
+        y = 'normal! y',
+        d = 'normal! d',
+        p = 'normal! p',
         s = 'EasyMotion',
         S = 'EasyMotionW'
 }
