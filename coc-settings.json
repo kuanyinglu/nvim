@@ -1,0 +1,6 @@
+{
+    "properties":{
+        "highlight.document.enable": true,
+        "highlight.colors.enable": true
+    }
+}
