@@ -1,17 +1,14 @@
 call plug#begin('~/AppData/Local/nvim/plugged')
 Plug 'neomake/neomake'
+Plug 'machakann/vim-highlightedyank'
+Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'Iron-E/nvim-libmodal'
-Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
-"Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-"Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
 Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
-"Plug 'rafi/vim-denite-session'
 Plug 'tpope/vim-fugitive'
 Plug 'bling/vim-airline'
 Plug 'tpope/vim-dadbod'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
-"Plug 'neoclide/coc-denite'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-surround'
 Plug 'tomtom/tcomment_vim'
@@ -33,7 +30,6 @@ set number
 set undodir=~/AppData/Local/nvim/undodir
 set undofile
 set mouse=a
-set clipboard=unnamed
 set cindent
 set updatetime=300
 set whichwrap+=<,>,h,l,[,]
@@ -43,7 +39,7 @@ filetype plugin indent on
 syntax enable
 
 set hidden
-let g:coc_global_extensions=['coc-omnisharp', 'coc-json', 'coc-html', 'coc-css', 'coc-sql', 'coc-tsserver', 'coc-prettier', 'coc-snippets', 'https://github.com/kuanyinglu/coc-symbol-lists']
+let g:coc_global_extensions=['coc-omnisharp', 'coc-json', 'coc-html', 'coc-css', 'coc-sql', 'coc-tsserver', 'coc-prettier', 'coc-snippets']
 let g:neomake_javascript_enabled_makers = ['eslint']
 let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
@@ -74,12 +70,14 @@ nmap <leader>ey :<C-U>call EasyUtil('normal! y')<CR>
 nmap <leader>eY :<C-U>call EasyUtil('normal! Y')<CR>
 nmap <leader>ed :<C-U>call EasyUtil('normal! "_d')<CR>
 nmap <leader>eD :<C-U>call EasyUtil('normal! "_D')<CR>
-nmap <leader>ep <Plug>yankstack_substitute_older_paste
-nmap <leader>eP <Plug>yankstack_substitute_newer_paste
-nnoremap x "_x
-nnoremap d "_d
-nnoremap D "_D
-vnoremap d "_d
+vnoremap y "*y
+nnoremap y "*y
+vnoremap Y "*Y
+nnoremap Y "*Y
+vnoremap p "*p
+nnoremap p "*p
+vnoremap P "*P
+nnoremap P "*P
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 inoremap <silent><expr> <c-space> coc#refresh()
 nmap <silent><leader>cd <Plug>(coc-definition)
