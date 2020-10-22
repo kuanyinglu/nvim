@@ -1,7 +1,8 @@
 if exists('g:vscode')
     call plug#begin('~/AppData/Local/nvim/vscode/plugged')
-    Plug 'asvetliakov/vim-easymotion'
+    Plug 'kuanyinglu/vim-easymotion'
     Plug 'machakann/vim-highlightedyank'
+    Plug 'wellle/targets.vim'
     call plug#end()
     "Basic
     set hidden
@@ -17,27 +18,20 @@ if exists('g:vscode')
     set undofile
     set mouse=a
     set cindent
-    set updatetime=300
-    set whichwrap+=<,>,h,l,[,]
     set switchbuf=useopen
     set autoread
     filetype plugin indent on
     syntax enable
-    set updatetime=300
     set guifont=Fira\ Code\ Nerd\ Font
     "Mappings
-    "nmap J :call VSCodeNotify('cursorPageDown')<CR>
-    "vmap J :call VSCodeNotify('cursorPageDown')<CR>
-    "nmap K :call VSCodeNotify('cursorPageUp')<CR>
-    "vmap K :call VSCodeNotify('cursorPageUp')<CR>
-    vmap J 20j
-    nmap J 20j
-    vmap K 20k
-    nmap K 20k
+    vmap J 15j
+    nmap J 15j
+    vmap K 15k
+    nmap K 15k
     nmap H 30h
-    nmap H 30h
+    vmap H 30h
     nmap L 30l
-    nmap L 30l
+    vmap L 30l
     map u :call VSCodeNotify('undo')<CR>
     map U :call VSCodeNotify('redo')<CR>
     vnoremap y "*y
@@ -54,8 +48,6 @@ if exists('g:vscode')
     imap <C-l> <C-w>l
     vnoremap < <gv
     vnoremap > >gv
-    nmap <Tab> :Tabnext<CR>
-    nmap <S-Tab> :Tabprev<CR>
     nnoremap gr <Cmd>call VSCodeNotify('editor.action.goToReferences')<CR>
     xnoremap <expr> <C-/> <SID>vscodeCommentary()
     nnoremap <expr> <C-/> <SID>vscodeCommentary() . '_'
@@ -70,14 +62,30 @@ if exists('g:vscode')
     "Easymotion"
     let g:EasyMotion_do_mapping = 0
     let g:EasyMotion_smartcase = 1
-    nnoremap s <Plug>(easymotion-s2)
-    nnoremap S <Plug>(easymotion-overwin-line)
-    vnoremap s <Plug>(easymotion-s2)
-    vnoremap S <Plug>(easymotion-overwin-line)
+    let g:EasyMotion_use_smartsign_us = 1
+    let g:EasyMotion_keys='asdfghjkl;qwertyuiop'
+    let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
+    let g:EasyMotion_disable_two_key_combo = 1
     map <C-j> <Plug>(easymotion-j)
     map <C-k> <Plug>(easymotion-k)
     map <C-l> <Plug>(easymotion-lineforward)
     map <C-h> <Plug>(easymotion-linebackward)
+    nmap s :<C-u>call EasyMotion#go({ "within_line": 1, "direction": 0, "visualmode": 0, "pattern": "[^a-zA-Z0-9\t ]"})<CR>
+    vmap s :<C-u>call EasyMotion#go({ "within_line": 1, "direction": 0, "visualmode": 1, "pattern": "[^a-zA-Z0-9\t ]"})<CR>
+    nmap S :<C-u>call EasyMotion#go({ "within_line": 1, "direction": 1, "visualmode": 0, "pattern": "[^a-zA-Z0-9\t ]"})<CR>
+    vmap S :<C-u>call EasyMotion#go({ "within_line": 1, "direction": 1, "visualmode": 1, "pattern": "[^a-zA-Z0-9\t ]"})<CR>
+    nmap ; <Plug>(easymotion-next)
+    vmap ; <Plug>(easymotion-next)
+    nmap , <Plug>(easymotion-prev)
+    vmap , <Plug>(easymotion-prev)
+    nmap f <Plug>(easymotion-fl)
+    vmap f <Plug>(easymotion-fl)
+    nmap F <Plug>(easymotion-Fl)
+    vmap F <Plug>(easymotion-Fl)
+    nmap t <Plug>(easymotion-tl)
+    vmap t <Plug>(easymotion-tl)
+    nmap T <Plug>(easymotion-Tl)
+    vmap T <Plug>(easymotion-Tl)
     "Custom functions
     function! s:split(...) abort
         let direction = a:1
@@ -220,6 +228,18 @@ else
     nmap Y y$
     nmap s <Plug>(easymotion-bd-f)
     nmap S <Plug>(easymotion-overwin-f)
+    nmap ; <Plug>(easymotion-next)
+    vmap ; <Plug>(easymotion-next)
+    nmap , <Plug>(easymotion-prev)
+    vmap , <Plug>(easymotion-prev)
+    nmap f <Plug>(easymotion-fl)
+    vmap f <Plug>(easymotion-fl)
+    nmap F <Plug>(easymotion-Fl)
+    vmap F <Plug>(easymotion-Fl)
+    nmap t <Plug>(easymotion-tl)
+    vmap t <Plug>(easymotion-tl)
+    nmap T <Plug>(easymotion-Tl)
+    vmap T <Plug>(easymotion-Tl)
     nmap <leader>ey :<C-U>call EasyUtil('normal! y')<CR>
     nmap <leader>eY :<C-U>call EasyUtil('normal! Y')<CR>
     nmap <leader>ed :<C-U>call EasyUtil('normal! "_d')<CR>
