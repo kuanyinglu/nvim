@@ -20,6 +20,8 @@ if exists('g:vscode')
     set cindent
     set switchbuf=useopen
     set autoread
+    set ignorecase
+    set smartcase 
     filetype plugin indent on
     syntax enable
     set guifont=Fira\ Code\ Nerd\ Font
@@ -63,13 +65,13 @@ if exists('g:vscode')
     let g:EasyMotion_do_mapping = 0
     let g:EasyMotion_smartcase = 1
     let g:EasyMotion_use_smartsign_us = 1
-    let g:EasyMotion_keys='asdfghjkl;qwertyuiop'
+    let g:EasyMotion_keys='asdfghjkl;'
     let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
     let g:EasyMotion_disable_two_key_combo = 1
-    map <C-j> <Plug>(easymotion-j)
-    map <C-k> <Plug>(easymotion-k)
-    map <C-l> <Plug>(easymotion-lineforward)
-    map <C-h> <Plug>(easymotion-linebackward)
+    map zj <Plug>(easymotion-j)
+    map zk <Plug>(easymotion-k)
+    map zl <Plug>(easymotion-lineforward)
+    map zh <Plug>(easymotion-linebackward)
     nmap s :<C-u>call EasyMotion#go({ "within_line": 1, "direction": 0, "visualmode": 0, "pattern": "[^a-zA-Z0-9\t ]"})<CR>
     vmap s :<C-u>call EasyMotion#go({ "within_line": 1, "direction": 0, "visualmode": 1, "pattern": "[^a-zA-Z0-9\t ]"})<CR>
     nmap S :<C-u>call EasyMotion#go({ "within_line": 1, "direction": 1, "visualmode": 0, "pattern": "[^a-zA-Z0-9\t ]"})<CR>
@@ -86,6 +88,40 @@ if exists('g:vscode')
     vmap t <Plug>(easymotion-tl)
     nmap T <Plug>(easymotion-Tl)
     vmap T <Plug>(easymotion-Tl)
+    "Targets
+    autocmd User targets#mappings#user call targets#mappings#extend({
+    \ '(': {'pair': [{'o': '(', 'c': ')'}]},
+    \ ')': {'pair': [{'o': '(', 'c': ')'}]},
+    \ '{': {'pair': [{'o': '{', 'c': '}'}]},
+    \ '}': {'pair': [{'o': '{', 'c': '}'}]},
+    \ '[': {'pair': [{'o': '[', 'c': ']'}]},
+    \ ']': {'pair': [{'o': '[', 'c': ']'}]},
+    \ '<': {'pair': [{'o': '<', 'c': '>'}]},
+    \ '>': {'pair': [{'o': '<', 'c': '>'}]},
+    \ '"': {'quote': [{'d': '"'}]},
+    \ "'": {'quote': [{'d': "'"}]},
+    \ '`': {'quote': [{'d': '`'}]},
+    \ ',': {'separator': [{'d': ','}]},
+    \ '.': {'separator': [{'d': '.'}]},
+    \ ';': {'separator': [{'d': ';'}]},
+    \ ':': {'separator': [{'d': ':'}]},
+    \ '+': {'separator': [{'d': '+'}]},
+    \ '-': {'separator': [{'d': '-'}]},
+    \ '=': {'separator': [{'d': '='}]},
+    \ '~': {'separator': [{'d': '~'}]},
+    \ '_': {'separator': [{'d': '_'}]},
+    \ '*': {'separator': [{'d': '*'}]},
+    \ '#': {'separator': [{'d': '#'}]},
+    \ '/': {'separator': [{'d': '/'}]},
+    \ '\': {'separator': [{'d': '\'}]},
+    \ '|': {'separator': [{'d': '|'}]},
+    \ '&': {'separator': [{'d': '&'}]},
+    \ '$': {'separator': [{'d': '$'}]},
+    \ 't': {'tag': [{}]},
+    \ 'a': {'argument': [{'o': '[([]', 'c': '[])]', 's': ','}]},
+    \ 'b': {'pair': [{'o':'(', 'c':')'}, {'o':'[', 'c':']'}, {'o':'{', 'c':'}'}, {'o':'<', 'c':'>'}]},
+    \ 'q': {'quote': [{'d':"'"}, {'d':'"'}, {'d':'`'}]},
+    \ })
     "Custom functions
     function! s:split(...) abort
         let direction = a:1
