@@ -3,6 +3,7 @@ if exists('g:vscode')
     Plug 'kuanyinglu/vim-easymotion'
     Plug 'machakann/vim-highlightedyank'
     Plug 'wellle/targets.vim'
+    Plug 'kuanyinglu/vim-momentum'
     call plug#end()
     "Basic
     set hidden
@@ -68,14 +69,12 @@ if exists('g:vscode')
     let g:EasyMotion_keys='asdfghjkl;'
     let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
     let g:EasyMotion_disable_two_key_combo = 1
-    map zj <Plug>(easymotion-j)
-    map zk <Plug>(easymotion-k)
-    map zl <Plug>(easymotion-lineforward)
-    map zh <Plug>(easymotion-linebackward)
-    nmap s :<C-u>call EasyMotion#go({ "within_line": 1, "direction": 0, "visualmode": 0, "pattern": "[^a-zA-Z0-9\t ]"})<CR>
-    vmap s :<C-u>call EasyMotion#go({ "within_line": 1, "direction": 0, "visualmode": 1, "pattern": "[^a-zA-Z0-9\t ]"})<CR>
-    nmap S :<C-u>call EasyMotion#go({ "within_line": 1, "direction": 1, "visualmode": 0, "pattern": "[^a-zA-Z0-9\t ]"})<CR>
-    vmap S :<C-u>call EasyMotion#go({ "within_line": 1, "direction": 1, "visualmode": 1, "pattern": "[^a-zA-Z0-9\t ]"})<CR>
+    nmap s <Plug>(vim-momentum-start)
+    xmap s <Plug>(vim-momentum-vstart)
+    map sj <Plug>(easymotion-j)
+    map sk <Plug>(easymotion-k)
+    map sl <Plug>(easymotion-lineforward)
+    map sh <Plug>(easymotion-linebackward)
     nmap ; <Plug>(easymotion-next)
     vmap ; <Plug>(easymotion-next)
     nmap , <Plug>(easymotion-prev)
@@ -217,6 +216,7 @@ else
     Plug 'sheerun/vim-polyglot'
     Plug 'ayu-theme/ayu-vim'
     Plug 'liuchengxu/vim-which-key'
+    Plug 'kuanyinglu/vim-momentum'
     call plug#end()
 
     let mapleader=" "
@@ -262,7 +262,8 @@ else
     noremap H zH
     noremap L zL
     nmap Y y$
-    nmap s <Plug>(easymotion-bd-f)
+    nmap s <Plug>(vim-momentum-start)
+    vmap s <Plug>(vim-momentum-start)
     nmap S <Plug>(easymotion-overwin-f)
     nmap ; <Plug>(easymotion-next)
     vmap ; <Plug>(easymotion-next)
