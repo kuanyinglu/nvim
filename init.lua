@@ -1,3 +1,11 @@
+local key_mapper = function(mode, key, result)
+    vim.api.nvim_set_keymap(
+      mode,
+      key,
+      result,
+      {noremap = true, silent = true}
+    )
+end
 -- for debug
 function dump(o)
     if type(o) == 'table' then
@@ -55,11 +63,11 @@ use{"nvim-lua/popup.nvim"}
 use{"nvim-lua/plenary.nvim"}
 use{"kyazdani42/nvim-web-devicons"}
 -- git
-use{"tpope/vim-fugitive", opt = true}
+use{"tpope/vim-fugitive"}
 use{"lewis6991/gitsigns.nvim"}
 -- db
-use{"tpope/vim-dadbod", opt = true}
-use{"kristijanhusak/vim-dadbod-ui", opt = true}
+use{"tpope/vim-dadbod"}
+use{"kristijanhusak/vim-dadbod-ui"}
 -- editor config
 use{"editorconfig/editorconfig-vim"}
 -- fixes
@@ -75,17 +83,20 @@ use{"neovim/nvim-lspconfig"}
 use{"tamago324/nlsp-settings.nvim"}
 use{"jose-elias-alvarez/null-ls.nvim"}
 -- quickfix
-use{"kevinhwang91/nvim-bqf", opt = true}
+use{"kevinhwang91/nvim-bqf"}
 -- buffer navigation
-use{"simrat39/symbols-outline.nvim", opt = true}
-use{"nvim-treesitter/playground", opt = true, cmd = {"TSPlaygroundToggle"}}
+use{"simrat39/symbols-outline.nvim"}
+use{"nvim-treesitter/playground"}
 use{"ray-x/navigator.lua"}
 -- utilities
-use{"nvim-telescope/telescope.nvim", opt = true}
-use{"nvim-telescope/telescope-fzf-native.nvim", opt = true}
-use{"AckslD/nvim-neoclip.lua", opt = true}
-use{"folke/which-key.nvim", opt = true}
-use{"mg979/vim-visual-multi",}
+use{"nvim-telescope/telescope.nvim"}
+use{"nvim-telescope/telescope-fzf-native.nvim"}
+use{"AckslD/nvim-neoclip.lua"}
+use{"folke/which-key.nvim"}
+use{"mg979/vim-visual-multi"}
+use{"petertriho/nvim-scrollbar"}
+use{"kevinhwang91/nvim-hlslens"}
+use{"machakann/vim-highlightedyank"}
 -- completion
 use{"hrsh7th/nvim-cmp"}
 use{"rafamadriz/friendly-snippets"}
@@ -93,31 +104,63 @@ use{"L3MON4D3/LuaSnip"}
 -- treesitter
 use{"nvim-treesitter/nvim-treesitter"}
 -- directory
-use{"kyazdani42/nvim-tree.lua", opt = true}
+use{"kyazdani42/nvim-tree.lua"}
 -- project
-use{"ahmedkhalf/project.nvim", opt = true}
+use{"ahmedkhalf/project.nvim"}
 -- status
 use{"nvim-lualine/lualine.nvim"}
 use{"romgrk/barbar.nvim"}
 -- debugging
-use{"mfussenegger/nvim-dap", opt = true}
-use{"Pocco81/DAPInstall.nvim", opt = true}
-use{"nvim-telescope/telescope-dap.nvim", opt = true}
+use{"mfussenegger/nvim-dap"}
+use{"Pocco81/DAPInstall.nvim"}
+use{"nvim-telescope/telescope-dap.nvim"}
 -- terminal
 use{"akinsho/toggleterm.nvim"}
+-- theme
+use{"morhetz/gruvbox"}
 end)
 
-
-vim.cmd('set undofile')
+-- default configs
+vim.opt.clipboard = "unnamedplus"
+vim.g.mapleader = " "
+vim.opt.cul = true
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 2
+vim.opt.smartindent = true
+vim.opt.hidden = true
+vim.opt.mouse = "a"
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.relativenumber = false
+vim.opt.ruler = false
+vim.opt.shortmess:append "sI"
+vim.opt.number = true
+vim.opt.signcolumn = "yes"
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+vim.opt.tabstop = 8
+vim.opt.timeoutlen = 400
+vim.opt.undofile = true
+vim.opt.termguicolors = true
+vim.opt.updatetime = 250
+vim.opt.whichwrap:append "<>[]hl"
+vim.opt.background = "dark"
+vim.cmd('colorscheme gruvbox')
 
 --Keymappings
+
 vim.api.nvim_set_keymap('n', 'J', '<C-d>', {silent = true})
 vim.api.nvim_set_keymap('n', 'K', '<C-u>', {silent = true})
 vim.api.nvim_set_keymap('n', 'U', '<C-r>', {silent = true})
 vim.api.nvim_set_keymap('n', 'gh', '<C-r>', {silent = true})
 vim.api.nvim_set_keymap('c', '<C-j>', '<C-n>', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('c', '<C-k>', '<C-p>', { noremap = true, silent = true})
-vim.o.timeoutlen = 1000
+
+--Setup scrollbar
+require("scrollbar").setup()
+require('hlslens').start()
+require("scrollbar.handlers.search").setup()
+require('gitsigns').setup()
 
 
 --Paste without moving cursor
