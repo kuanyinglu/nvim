@@ -12,6 +12,21 @@ function dump(o)
     end
 end
 
+-- add yank to register
+local currentRegister = 'z'
+local alphabet = 'abcdefghijklmnopqrstuvwxyz'
+function putYankTextInRegister()
+    if vim.v['event']['regname'] == '+' or vim.v['event']['regname'] == '*' then
+        vim.cmd('call setreg("'.. currentRegister .. '", getreg("' .. vim.v['event']['regname'] .. '"))')
+        local index = string.find(alphabet, currentRegister)
+        index = (index % string.len(alphabet)) + 1
+        currentRegister = string.sub(alphabet, index, index)
+    end
+end
+vim.cmd("augroup initLua")
+vim.cmd("autocmd TextYankPost * lua putYankTextInRegister()")
+vim.cmd("augroup END")
+
 local disable_distribution_plugins = function()
     vim.g.loaded_gzip              = 1
     vim.g.loaded_tar               = 1
@@ -33,97 +48,76 @@ local disable_distribution_plugins = function()
     vim.g.loaded_netrwFileHandlers = 1
 end
 
-local packer = require("packer")
+local packer = require("packer").startup(function()
+-- dependencies
+use{'wbthomason/packer.nvim'}
+use{"nvim-lua/popup.nvim"}
+use{"nvim-lua/plenary.nvim"}
+use{"kyazdani42/nvim-web-devicons"}
 -- git
-packer.use({"lambdalisue/gina.vim", opt = true})
+use{"lambdalisue/gina.vim", opt = true, cmd = {"Gina"}}
 -- db
-packer.use({"tpope/vim-dadbod", opt = true})
-packer.use({"kristijanhusak/vim-dadbod-ui", opt = true})
+use{"tpope/vim-dadbod", opt = true}
+use{"kristijanhusak/vim-dadbod-ui", opt = true}
 -- editor config
-packer.use({"editorconfig/editorconfig-vim", opt = true})
+use{"editorconfig/editorconfig-vim", opt = true}
+-- fixes
+use{"antoinemadec/FixCursorHold.nvim"}
 -- cursor/motion
-packer.use({"itchyny/vim-cursorword"})
-packer.use({"kuanyinglu/vim-momentum"})
-packer.use({"kuanyinglu/vim-hop"})
--- text object
--- todo - use user text objects to replce targets.vim
-packer.use({"wellle/targets.vim"})
-packer.use({"kana/vim-textobj-user"})
-packer.use({"tpope/vim-surround"})
--- lspinstall doesn't work well with windows
--- packer.use({"anott03/nvim-lspinstall"})
--- find and replace
-packer.use({"windwp/nvim-spectre", opt = true})
+use{"itchyny/vim-cursorword"}
+use{"kuanyinglu/vim-textobj"}
+use{"ggandor/lightspeed.nvim"}
+-- lsp installer
+use{"williamboman/nvim-lsp-installer"}
+use{"hrsh7th/cmp-nvim-lsp"}
+use{"neovim/nvim-lspconfig"}
+use{"tamago324/nlsp-settings.nvim"}
+use{"jose-elias-alvarez/null-ls.nvim"}
+use{"williamboman/nvim-lsp-installer"}
+-- quickfix
+use{"kevinhwang91/nvim-bqf", opt = true}
 -- buffer navigation
-packer.use({"simrat39/symbols-outline.nvim", opt = true})
-packer.use({"nvim-treesitter/playground", opt = true})
+use{"simrat39/symbols-outline.nvim", opt = true}
+use{"nvim-treesitter/playground", opt = true, cmd = {"TSPlaygroundToggle"}}
+use{"lewis6991/gitsigns.nvim", opt = true, cmd = {"TSPlaygroundToggle"}}
+-- utilities
+use{"nvim-telescope/telescope.nvim", opt = true}
+use{"nvim-telescope/telescope-fzf-native.nvim", opt = true}
+use{"folke/which-key.nvim", opt = true}
+use{"mg979/vim-visual-multi",}
+-- completion
+use{"hrsh7th/nvim-cmp"}
+use{"rafamadriz/friendly-snippets"}
+use{"L3MON4D3/LuaSnip"}
+-- treesitter
+use{"nvim-treesitter/nvim-treesitter"}
+-- directory
+use{"kyazdani42/nvim-tree.lua", opt = true}
+-- project
+use{"ahmedkhalf/project.nvim", opt = true}
+-- status
+use{"nvim-lualine/lualine.nvim"}
+use{"romgrk/barbar.nvim"}
+-- debugging
+use{"mfussenegger/nvim-dap", opt = true}
+use{"Pocco81/DAPInstall.nvim", opt = true}
+-- terminal
+use{"akinsho/toggleterm.nvim"}
+end)
+
+
 vim.cmd('set undofile')
+
+--Keymappings
 vim.api.nvim_set_keymap('n', 'J', '<C-d>', {silent = true})
 vim.api.nvim_set_keymap('n', 'K', '<C-u>', {silent = true})
 vim.api.nvim_set_keymap('n', 'U', '<C-r>', {silent = true})
-vim.api.nvim_set_keymap('n', 'ss', '<Plug>(vim-momentum-start)', {})
-vim.api.nvim_set_keymap('x', 'ss', '<Plug>(vim-momentum-vstart)', {})
-vim.api.nvim_set_keymap('n', 'sh', '<Plug>(vim-hop-start)', {})
-vim.api.nvim_set_keymap('x', 'sh', '<Plug>(vim-hop-vstart)', {})
+vim.api.nvim_set_keymap('n', 'gh', '<C-r>', {silent = true})
+vim.api.nvim_set_keymap('c', '<C-j>', '<C-n>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('c', '<C-k>', '<C-p>', { noremap = true, silent = true})
+vim.o.timeoutlen = 1000
 
-vim.cmd("autocmd User targets#mappings#user call targets#mappings#extend({\z
-    '(': {'pair': [{'o': '(', 'c': ')'}]}, \z
-    ')': {'pair': [{'o': '(', 'c': ')'}]}, \z
-    '{': {'pair': [{'o': '{', 'c': '}'}]}, \z
-    '}': {'pair': [{'o': '{', 'c': '}'}]}, \z
-    '[': {'pair': [{'o': '[', 'c': ']'}]}, \z
-    ']': {'pair': [{'o': '[', 'c': ']'}]}, \z
-    '<': {'pair': [{'o': '<', 'c': '>'}]}, \z
-    '>': {'pair': [{'o': '<', 'c': '>'}]}, \z
-    '\"': {'quote': [{'d': '\"'}]}, \z
-    \"'\": {'quote': [{'d': \"'\"}]}, \z
-    '`': {'quote': [{'d': '`'}]}, \z
-    ',': {'separator': [{'d': ','}]}, \z
-    '.': {'separator': [{'d': '.'}]}, \z
-    ';': {'separator': [{'d': ';'}]}, \z
-    ':': {'separator': [{'d': ':'}]}, \z
-    '+': {'separator': [{'d': '+'}]}, \z
-    '-': {'separator': [{'d': '-'}]}, \z
-    '=': {'separator': [{'d': '='}]}, \z
-    '~': {'separator': [{'d': '~'}]}, \z
-    '_': {'separator': [{'d': '_'}]}, \z
-    '*': {'separator': [{'d': '*'}]}, \z
-    '#': {'separator': [{'d': '#'}]}, \z
-    '/': {'separator': [{'d': '/'}]}, \z
-    '\\': {'separator': [{'d': '\\'}]}, \z
-    '|': {'separator': [{'d': '|'}]}, \z
-    '&': {'separator': [{'d': '&'}]}, \z
-    '$': {'separator': [{'d': '$'}]}, \z
-    't': {'tag': [{}]}, \z
-    'a': {'argument': [{'o': '[([]', 'c': '[])]', 's': ','}]}, \z
-    'b': {'pair': [{'o':'(', 'c':')'}, {'o':'[', 'c':']'}, {'o':'{', 'c':'}'}, {'o':'<', 'c':'>'}]}, \z
-    'q': {'quote': [{'d':\"'\"}, {'d':'\"'}, {'d':'`'}]}, \z
-    })")
 
-local omnisharp_bin = vim.fn.stdpath("data") .. "\\lspinstall\\omnisharp\\OmniSharp.exe"
-require'lspconfig'.omnisharp.setup {
-    cmd = {omnisharp_bin, "--languageserver", "--hostPID", tostring(vim.fn.getpid()), "RoslynExtensionsOptions:EnableAnalyzersSupport=true"},
-    on_attach = require'lsp'.common_on_attach,
-    -- filetypes = { "cs", "vb" },
-    root_dir = require('lspconfig/util').root_pattern("*.sln")
-}
+--Paste without moving cursor
+vim.cmd('command! -bar -bang -range -register Put call append(<line2> - <bang>0, getreg(<q-reg>, 1, 1))')
 
---npm install -g typescript typescript-language-server
-require'lspconfig'.tsserver.setup {
-    cmd = {"typescript-language-server.cmd", "--stdio"},
-    filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
-    on_attach = require'lsp'.tsserver_on_attach,
-    -- This makes sure tsserver is not used for formatting (I prefer prettier)
-    -- on_attach = require'lsp'.common_on_attach,
-    root_dir = require('lspconfig/util').root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
-    settings = {documentFormatting = false},
-    handlers = {
-        ["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-            virtual_text = O.tsserver.diagnostics.virtual_text,
-            signs = O.tsserver.diagnostics.signs,
-            underline = O.tsserver.diagnostics.underline,
-            update_in_insert = true
-
-        })
-    }
-}

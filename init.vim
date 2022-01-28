@@ -1,10 +1,7 @@
 if exists('g:vscode')    
     call plug#begin('~/AppData/Local/nvim/user/vscode/plugged')
-    " Plug 'kuanyinglu/vim-easymotion'
-    Plug 'kuanyinglu/vim-hop'
     Plug 'machakann/vim-highlightedyank'
-    Plug 'wellle/targets.vim'
-    Plug 'kuanyinglu/vim-momentum'
+    Plug 'kuanyinglu/vim-textobj'
     call plug#end()
     "Basic
     set hidden
@@ -62,67 +59,6 @@ if exists('g:vscode')
     nmap gc  <Plug>VSCodeCommentary
     omap gc  <Plug>VSCodeCommentary
     nmap gcc <Plug>VSCodeCommentaryLine
-    "Easymotion"
-    " let g:EasyMotion_do_mapping = 0
-    " let g:EasyMotion_smartcase = 1
-    " let g:EasyMotion_use_smartsign_us = 1
-    " let g:EasyMotion_keys='asdfghjkl;'
-    " let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
-    " let g:EasyMotion_disable_two_key_combo = 1
-    nmap ss <Plug>(vim-momentum-start)
-    xmap ss <Plug>(vim-momentum-vstart)
-    nmap sh <Plug>(vim-hop-start)
-    xmap sh <Plug>(vim-hop-vstart)
-    " map sj <Plug>(easymotion-j)
-    " map sk <Plug>(easymotion-k)
-    " map sl <Plug>(easymotion-lineforward)
-    " map sh <Plug>(easymotion-linebackward)
-    " nmap ; <Plug>(easymotion-next)
-    " vmap ; <Plug>(easymotion-next)
-    " nmap , <Plug>(easymotion-prev)
-    " vmap , <Plug>(easymotion-prev)
-    " nmap f <Plug>(easymotion-fl)
-    " vmap f <Plug>(easymotion-fl)
-    " nmap F <Plug>(easymotion-Fl)
-    " vmap F <Plug>(easymotion-Fl)
-    " nmap t <Plug>(easymotion-tl)
-    " vmap t <Plug>(easymotion-tl)
-    " nmap T <Plug>(easymotion-Tl)
-    " vmap T <Plug>(easymotion-Tl)
-    "Targets
-    autocmd User targets#mappings#user call targets#mappings#extend({
-    \ '(': {'pair': [{'o': '(', 'c': ')'}]},
-    \ ')': {'pair': [{'o': '(', 'c': ')'}]},
-    \ '{': {'pair': [{'o': '{', 'c': '}'}]},
-    \ '}': {'pair': [{'o': '{', 'c': '}'}]},
-    \ '[': {'pair': [{'o': '[', 'c': ']'}]},
-    \ ']': {'pair': [{'o': '[', 'c': ']'}]},
-    \ '<': {'pair': [{'o': '<', 'c': '>'}]},
-    \ '>': {'pair': [{'o': '<', 'c': '>'}]},
-    \ '"': {'quote': [{'d': '"'}]},
-    \ "'": {'quote': [{'d': "'"}]},
-    \ '`': {'quote': [{'d': '`'}]},
-    \ ',': {'separator': [{'d': ','}]},
-    \ '.': {'separator': [{'d': '.'}]},
-    \ ';': {'separator': [{'d': ';'}]},
-    \ ':': {'separator': [{'d': ':'}]},
-    \ '+': {'separator': [{'d': '+'}]},
-    \ '-': {'separator': [{'d': '-'}]},
-    \ '=': {'separator': [{'d': '='}]},
-    \ '~': {'separator': [{'d': '~'}]},
-    \ '_': {'separator': [{'d': '_'}]},
-    \ '*': {'separator': [{'d': '*'}]},
-    \ '#': {'separator': [{'d': '#'}]},
-    \ '/': {'separator': [{'d': '/'}]},
-    \ '\': {'separator': [{'d': '\'}]},
-    \ '|': {'separator': [{'d': '|'}]},
-    \ '&': {'separator': [{'d': '&'}]},
-    \ '$': {'separator': [{'d': '$'}]},
-    \ 't': {'tag': [{}]},
-    \ 'a': {'argument': [{'o': '[([]', 'c': '[])]', 's': ','}]},
-    \ 'b': {'pair': [{'o':'(', 'c':')'}, {'o':'[', 'c':']'}, {'o':'{', 'c':'}'}, {'o':'<', 'c':'>'}]},
-    \ 'q': {'quote': [{'d':"'"}, {'d':'"'}, {'d':'`'}]},
-    \ })
     "Custom functions
     function! s:split(...) abort
         let direction = a:1
@@ -198,4 +134,7 @@ if exists('g:vscode')
     command! -complete=file -nargs=? New call <SID>split('h', '__vscode_new__')
     command! -complete=file -nargs=? Vnew call <SID>split('v', '__vscode_new__')
     command! -bang Only if <q-bang> == '!' | call <SID>closeOtherEditors() | else | call VSCodeNotify('workbench.action.joinAllGroups') | endif
+
+else
+    
 endif
