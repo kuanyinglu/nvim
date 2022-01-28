@@ -55,12 +55,13 @@ use{"nvim-lua/popup.nvim"}
 use{"nvim-lua/plenary.nvim"}
 use{"kyazdani42/nvim-web-devicons"}
 -- git
-use{"lambdalisue/gina.vim", opt = true, cmd = {"Gina"}}
+use{"tpope/vim-fugitive", opt = true}
+use{"lewis6991/gitsigns.nvim"}
 -- db
 use{"tpope/vim-dadbod", opt = true}
 use{"kristijanhusak/vim-dadbod-ui", opt = true}
 -- editor config
-use{"editorconfig/editorconfig-vim", opt = true}
+use{"editorconfig/editorconfig-vim"}
 -- fixes
 use{"antoinemadec/FixCursorHold.nvim"}
 -- cursor/motion
@@ -73,16 +74,16 @@ use{"hrsh7th/cmp-nvim-lsp"}
 use{"neovim/nvim-lspconfig"}
 use{"tamago324/nlsp-settings.nvim"}
 use{"jose-elias-alvarez/null-ls.nvim"}
-use{"williamboman/nvim-lsp-installer"}
 -- quickfix
 use{"kevinhwang91/nvim-bqf", opt = true}
 -- buffer navigation
 use{"simrat39/symbols-outline.nvim", opt = true}
 use{"nvim-treesitter/playground", opt = true, cmd = {"TSPlaygroundToggle"}}
-use{"lewis6991/gitsigns.nvim", opt = true, cmd = {"TSPlaygroundToggle"}}
+use{"ray-x/navigator.lua"}
 -- utilities
 use{"nvim-telescope/telescope.nvim", opt = true}
 use{"nvim-telescope/telescope-fzf-native.nvim", opt = true}
+use{"AckslD/nvim-neoclip.lua", opt = true}
 use{"folke/which-key.nvim", opt = true}
 use{"mg979/vim-visual-multi",}
 -- completion
@@ -101,6 +102,7 @@ use{"romgrk/barbar.nvim"}
 -- debugging
 use{"mfussenegger/nvim-dap", opt = true}
 use{"Pocco81/DAPInstall.nvim", opt = true}
+use{"nvim-telescope/telescope-dap.nvim", opt = true}
 -- terminal
 use{"akinsho/toggleterm.nvim"}
 end)
