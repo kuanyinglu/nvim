@@ -2,6 +2,7 @@ if exists('g:vscode')
     call plug#begin('~/AppData/Local/nvim/user/vscode/plugged')
     Plug 'machakann/vim-highlightedyank'
     Plug 'kuanyinglu/vim-textobj'
+    Plug 'mg979/vim-visual-multi'
     call plug#end()
     "Basic
     set hidden
