@@ -93,7 +93,12 @@ if not vim.g.vscode then
               event = "BufRead",
         }
         -- lsp installer
-        use{"williamboman/nvim-lsp-installer"}
+        use{
+            "williamboman/nvim-lsp-installer",
+            config = function()
+                require('config.nvim-lsp-installer')
+            end
+        }
         use{"neovim/nvim-lspconfig"}
         use{"tamago324/nlsp-settings.nvim"}
         use{"jose-elias-alvarez/null-ls.nvim"}
@@ -183,8 +188,9 @@ if not vim.g.vscode then
         -- treesitter
         use {
             "nvim-treesitter/nvim-treesitter",
+            run = ":TSUpdate",
             config = function()
-              require("config.treesitter").setup()
+              require("config.treesitter")
             end
         }
         -- directory
@@ -253,6 +259,7 @@ if not vim.g.vscode then
 
     --Paste without moving cursor
     vim.cmd('command! -bar -bang -range -register Put call append(<line2> - <bang>0, getreg(<q-reg>, 1, 1))')
+    vim.cmd('source '.. util.join_paths(vim.fn.stdpath('config'), 'packer', 'packer_compiled.lua'))
 else
-    vim.cmd('source ~/AppData/Local/nvim/vscode/init.vim')
+    vim.cmd('source ' .. vim.fn.stdpath('config') .. '/vscode/init.vim')
 end
