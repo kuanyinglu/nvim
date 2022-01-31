@@ -21,21 +21,6 @@ if not vim.g.vscode then
         end
     end
 
-    -- add yank to register
-    local currentRegister = 'z'
-    local alphabet = 'abcdefghijklmnopqrstuvwxyz'
-    function putYankTextInRegister()
-        if vim.v['event']['regname'] == '+' or vim.v['event']['regname'] == '*' then
-            vim.cmd('call setreg("'.. currentRegister .. '", getreg("' .. vim.v['event']['regname'] .. '"))')
-            local index = string.find(alphabet, currentRegister)
-            index = (index % string.len(alphabet)) + 1
-            currentRegister = string.sub(alphabet, index, index)
-        end
-    end
-    vim.cmd("augroup initLua")
-    vim.cmd("autocmd TextYankPost * lua putYankTextInRegister()")
-    vim.cmd("augroup END")
-
     local disable_distribution_plugins = function()
         vim.g.loaded_gzip              = 1
         vim.g.loaded_tar               = 1
@@ -95,6 +80,7 @@ if not vim.g.vscode then
         -- lsp installer
         use{
             "williamboman/nvim-lsp-installer",
+            after = "cmp-nvim-lsp",
             config = function()
                 require('config.nvim-lsp-installer')
             end
@@ -106,10 +92,6 @@ if not vim.g.vscode then
         use{"kevinhwang91/nvim-bqf"}
         -- buffer navigation
         use {
-            "simrat39/symbols-outline.nvim",
-            cmd = {"SymbolsOutline", "SymbolsOutlineOpen"}
-        }
-        use {
             "nvim-treesitter/playground",
             cmd = "TSPlaygroundToggle"
         }
@@ -117,19 +99,28 @@ if not vim.g.vscode then
         -- utilities
         use {
             "nvim-telescope/telescope.nvim",
+            config = function()
+              require("config.telescope")
+            end
         }
         use {
             "nvim-telescope/telescope-fzf-native.nvim",
-            after = "telescope.nvim"
+            run = 'make'
         }
         use {
             "AckslD/nvim-neoclip.lua",
             after = "telescope.nvim",
             config = function()
                 require('neoclip').setup()
+                require('telescope').load_extension('neoclip')
             end
         }
-        use{"folke/which-key.nvim"}
+        use {
+            "folke/which-key.nvim",
+            config = function()
+              require("config.which-key")
+            end
+        }
         use{"mg979/vim-visual-multi"}
         use {
             "kevinhwang91/nvim-hlslens",
@@ -152,18 +143,18 @@ if not vim.g.vscode then
         }
         -- completion
         use {
-            "rafamadriz/friendly-snippets",
-            module = "cmp_nvim_lsp",
-            event = "InsertEnter"
-        }
-        use {
-            "hrsh7th/nvim-cmp",
-            event = "InsertEnter",
-            after = "friendly-snippets"
+            "rafamadriz/friendly-snippets"
         }
         use {
             "L3MON4D3/LuaSnip",
-            after = "nvim-cmp"
+            after = "friendly-snippets"
+        }
+        use {
+            "hrsh7th/nvim-cmp",
+            after = "LuaSnip",
+            config = function()
+                require("config.nvim-cmp")
+            end
         }
         use {
             "saadparwaiz1/cmp_luasnip",
@@ -184,6 +175,10 @@ if not vim.g.vscode then
         use {
             "hrsh7th/cmp-path",
             after = "cmp-buffer"
+        }
+        use {
+            "ray-x/cmp-treesitter",
+            after = "nvim-cmp"
         }
         -- treesitter
         use {
@@ -208,7 +203,10 @@ if not vim.g.vscode then
         use{"Pocco81/DAPInstall.nvim"}
         use {
             "nvim-telescope/telescope-dap.nvim",
-            after = "telescope.nvim"
+            after = "telescope.nvim",
+            config = function()
+                require('telescope').load_extension('dap')
+            end 
         }
         -- terminal
         use{"akinsho/toggleterm.nvim"}
@@ -245,20 +243,35 @@ if not vim.g.vscode then
     vim.opt.updatetime = 250
     vim.opt.whichwrap:append "<>[]hl"
     vim.opt.background = "dark"
+    vim.opt.showmode = false
+    vim.opt.wrap = true
+    vim.opt.completeopt = "menuone,noselect"
     vim.cmd('colorscheme gruvbox')
 
-    --Keymappings
+    --Neovim related mappings
 
-    vim.api.nvim_set_keymap('n', 'J', '<C-d>', {silent = true})
-    vim.api.nvim_set_keymap('n', 'K', '<C-u>', {silent = true})
-    vim.api.nvim_set_keymap('n', 'U', '<C-r>', {silent = true})
-    vim.api.nvim_set_keymap('n', 'gh', '<C-r>', {silent = true})
-    vim.api.nvim_set_keymap('c', '<C-j>', '<C-n>', { noremap = true, silent = true})
-    vim.api.nvim_set_keymap('c', '<C-k>', '<C-p>', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', 'J', '<C-d>', {noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', 'K', '<C-u>', {noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', 'U', '<C-r>', {noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', 'gh', '<C-r>', {noremap = true, silent = true})
+    vim.api.nvim_set_keymap('c', '<down>', 'pumvisible() ? "\\<C-n>" : "\\<down>"', { expr = true, noremap = true})
+    vim.api.nvim_set_keymap('c', '<up>', 'pumvisible() ? "\\<C-p>" : "\\<up>"', { expr = true, noremap = true})
+    vim.api.nvim_set_keymap('n', '<C-k>', '<C-w>k', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<C-w>', '<C-w>j', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<C-h>', '<C-w>h', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<C-left>', '<C-w>h', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<C-l>', '<C-w>l', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<C-s>', ':<c-u>update<cr>', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<A-k>', '<C-w>k', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<A-w>', '<C-w>j', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<A-h>', '<C-w>h', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<A-left>', '<C-w>h', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<A-l>', '<C-w>l', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<A-s>', ':<c-u>update<cr>', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', 'Q', '<nop>', { noremap = true, silent = true})
 
 
     --Paste without moving cursor
-    vim.cmd('command! -bar -bang -range -register Put call append(<line2> - <bang>0, getreg(<q-reg>, 1, 1))')
     vim.cmd('source '.. util.join_paths(vim.fn.stdpath('config'), 'packer', 'packer_compiled.lua'))
 else
     vim.cmd('source ' .. vim.fn.stdpath('config') .. '/vscode/init.vim')
