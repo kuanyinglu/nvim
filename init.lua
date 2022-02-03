@@ -1,12 +1,5 @@
+print("starting")
 if not vim.g.vscode then
-    local key_mapper = function(mode, key, result)
-        vim.api.nvim_set_keymap(
-          mode,
-          key,
-          result,
-          {noremap = true, silent = true}
-        )
-    end
     -- for debug
     function dump(o)
         if type(o) == 'table' then
@@ -21,30 +14,28 @@ if not vim.g.vscode then
         end
     end
 
-    local disable_distribution_plugins = function()
-        vim.g.loaded_gzip              = 1
-        vim.g.loaded_tar               = 1
-        vim.g.loaded_tarPlugin         = 1
-        vim.g.loaded_zip               = 1
-        vim.g.loaded_zipPlugin         = 1
-        vim.g.loaded_getscript         = 1
-        vim.g.loaded_getscriptPlugin   = 1
-        vim.g.loaded_vimball           = 1
-        vim.g.loaded_vimballPlugin     = 1
-        vim.g.loaded_matchit           = 1
-        vim.g.loaded_matchparen        = 1
-        vim.g.loaded_2html_plugin      = 1
-        vim.g.loaded_logiPat           = 1
-        vim.g.loaded_rrhelper          = 1
-        vim.g.loaded_netrw             = 1
-        vim.g.loaded_netrwPlugin       = 1
-        vim.g.loaded_netrwSettings     = 1
-        vim.g.loaded_netrwFileHandlers = 1
-    end
+    vim.g.loaded_gzip              = 1
+    vim.g.loaded_tar               = 1
+    vim.g.loaded_tarPlugin         = 1
+    vim.g.loaded_zip               = 1
+    vim.g.loaded_zipPlugin         = 1
+    vim.g.loaded_getscript         = 1
+    vim.g.loaded_getscriptPlugin   = 1
+    vim.g.loaded_vimball           = 1
+    vim.g.loaded_vimballPlugin     = 1
+    vim.g.loaded_matchit           = 1
+    vim.g.loaded_matchparen        = 1
+    vim.g.loaded_2html_plugin      = 1
+    vim.g.loaded_logiPat           = 1
+    vim.g.loaded_rrhelper          = 1
+    vim.g.loaded_netrw             = 1
+    vim.g.loaded_netrwPlugin       = 1
+    vim.g.loaded_netrwSettings     = 1
+    vim.g.loaded_netrwFileHandlers = 1
 
     local util = require("packer.util")
     local packer = require("packer").startup({function()
-        -- dependencies
+        -- -- dependencies
         use{'wbthomason/packer.nvim'}
         use{"nvim-lua/popup.nvim"}
         use{"nvim-lua/plenary.nvim"}
@@ -86,16 +77,16 @@ if not vim.g.vscode then
             end
         }
         use{"neovim/nvim-lspconfig"}
+        use{"pedro757/emmet"}
         use{"tamago324/nlsp-settings.nvim"}
         use{"jose-elias-alvarez/null-ls.nvim"}
         -- quickfix
-        use{"kevinhwang91/nvim-bqf"}
+        use{"kevinhwang91/nvim-bqf", ft = 'qf'}
         -- buffer navigation
         use {
             "nvim-treesitter/playground",
             cmd = "TSPlaygroundToggle"
         }
-        use{"ray-x/navigator.lua"}
         -- utilities
         use {
             "nvim-telescope/telescope.nvim",
@@ -121,7 +112,6 @@ if not vim.g.vscode then
               require("config.which-key")
             end
         }
-        use{"mg979/vim-visual-multi"}
         use {
             "kevinhwang91/nvim-hlslens",
             config = function()
@@ -191,10 +181,21 @@ if not vim.g.vscode then
         -- directory
         use {
             "kyazdani42/nvim-tree.lua",
-            cmd =  { "NvimTreeToggle", "NvimTreeFocus" }
+            cmd =  { "NvimTreeToggle", "NvimTreeFocus" },
+            config = function()
+                require("config.nvim-tree")
+              end
+  
         }
         -- project
-        use{"ahmedkhalf/project.nvim"}
+        use {
+            "ahmedkhalf/project.nvim",
+            after = "telescope.nvim",
+            config = function()
+                require("project_nvim").setup()
+                require('telescope').load_extension('projects')
+            end
+        }
         -- status
         use{"nvim-lualine/lualine.nvim"}
         use{"romgrk/barbar.nvim"}
@@ -249,15 +250,16 @@ if not vim.g.vscode then
     vim.cmd('colorscheme gruvbox')
 
     --Neovim related mappings
-
+    
+    vim.api.nvim_set_keymap('n', '<Space>', '<NOP>', {noremap = true, silent = true})
     vim.api.nvim_set_keymap('n', 'J', '<C-d>', {noremap = true, silent = true})
     vim.api.nvim_set_keymap('n', 'K', '<C-u>', {noremap = true, silent = true})
     vim.api.nvim_set_keymap('n', 'U', '<C-r>', {noremap = true, silent = true})
-    vim.api.nvim_set_keymap('n', 'gh', '<C-r>', {noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', 'H', '<C-l>', {noremap = true, silent = true})
     vim.api.nvim_set_keymap('c', '<down>', 'pumvisible() ? "\\<C-n>" : "\\<down>"', { expr = true, noremap = true})
     vim.api.nvim_set_keymap('c', '<up>', 'pumvisible() ? "\\<C-p>" : "\\<up>"', { expr = true, noremap = true})
     vim.api.nvim_set_keymap('n', '<C-k>', '<C-w>k', { noremap = true, silent = true})
-    vim.api.nvim_set_keymap('n', '<C-w>', '<C-w>j', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<C-j>', '<C-w>j', { noremap = true, silent = true})
     vim.api.nvim_set_keymap('n', '<C-h>', '<C-w>h', { noremap = true, silent = true})
     vim.api.nvim_set_keymap('n', '<C-left>', '<C-w>h', { noremap = true, silent = true})
     vim.api.nvim_set_keymap('n', '<C-l>', '<C-w>l', { noremap = true, silent = true})
@@ -269,6 +271,55 @@ if not vim.g.vscode then
     vim.api.nvim_set_keymap('n', '<A-l>', '<C-w>l', { noremap = true, silent = true})
     vim.api.nvim_set_keymap('n', '<A-s>', ':<c-u>update<cr>', { noremap = true, silent = true})
     vim.api.nvim_set_keymap('n', 'Q', '<nop>', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('v', '>', '>gv', { noremap = true, silent = true})
+    vim.api.nvim_set_keymap('v', '<', '<gv', { noremap = true, silent = true})
+
+    local m = function(mode, key, result)
+        vim.api.nvim_buf_set_keymap(0, mode, key, "<cmd> " .. result .. "<cr>", {
+            noremap = true,
+            silent = true,
+        })
+      end
+    --Quickfix improvement
+    m("n", "<leader>qa", 'call setqflist([{ "bufnr":bufnr(), "lnum":line("."), "col":col("."), "text":getline(line("."))[col("."):] }], "a")')
+    m("n", "<leader>qn", "cn")
+    m("n", "<leader>qp", "cp")
+    m("n", "<leader>qN", "cnf")
+    m("n", "<leader>qP", "cpf")
+    m("n", "<leader>qo", "copen")
+    m("n", "<leader>qq", "ccl")
+    m("n", "<leader>qc", "call setqflist([], 'r')<cr><cmd>ccl")
+    
+    --Plugin mappings
+    m("n", "<leader>lh", "lua vim.lsp.buf.hover()")
+    m("n", "<leader>lR", "lua vim.lsp.buf.rename()")
+    m("n", "<leader>lf", "lua vim.lsp.buf.formatting()")
+    m("n", "<leader>lH", "lua vim.lsp.buf.signature_help()")
+      
+    m("n", "<C-_>", "WhichKey")
+    m("v", "<C-_>", "WhichKey v")
+
+    m("n", "<leader>t", "NvimTreeToggle")
+    m("n", "<leader>ff", "Telescope find_files")
+    
+    m("n", "<leader>fo", "Telescope oldfiles")
+    m("n", "<leader>fg", "Telescope live_grep")
+    m("n", "<leader>fb", "Telescope buffers")
+    m("n", "<leader>fc", "Telescope neoclip")
+    m("n", "<leader>fj", "Telescope jumplist")
+    m("n", "<leader>ft", "Telescope treesitter")
+    m("n", "<leader>lr", "Telescope lsp_references")
+    m("n", "<leader>ls", "Telescope lsp_document_symbols")
+    m("n", "<leader>lS", "Telescope lsp_workspace_symbols")
+    m("n", "<leader>la", "Telescope lsp_code_actions")
+    m("n", "<leader>lD", "Telescope diagnostics")
+    m("n", "<leader>li", "Telescope lsp_implementations")
+    m("n", "<leader>ld", "Telescope lsp_definitions")
+    m("n", "<leader>lt", "Telescope lsp_type_definitions")
+    m("n", "<leader>gs", "Telescope git_status")
+    m("n", "<leader>gS", "Telescope git_stash")
+    m("n", "<leader>gB", "Telescope git_branches")
+    m("n", "<leader>gb", "Telescope git_bcommits")
 
 
     --Paste without moving cursor
