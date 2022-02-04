@@ -1,4 +1,3 @@
-print("starting")
 if not vim.g.vscode then
     -- for debug
     function dump(o)
@@ -81,7 +80,6 @@ if not vim.g.vscode then
         use{"tamago324/nlsp-settings.nvim"}
         use{"jose-elias-alvarez/null-ls.nvim"}
         -- quickfix
-        use{"kevinhwang91/nvim-bqf", ft = 'qf'}
         -- buffer navigation
         use {
             "nvim-treesitter/playground",
@@ -130,6 +128,12 @@ if not vim.g.vscode then
         use {
             "norcalli/nvim-colorizer.lua",
             event = "BufRead",
+        }
+        use {
+            'numToStr/Comment.nvim',
+            config = function()
+                require('Comment').setup()
+            end
         }
         -- completion
         use {
@@ -275,7 +279,7 @@ if not vim.g.vscode then
     vim.api.nvim_set_keymap('v', '<', '<gv', { noremap = true, silent = true})
 
     local m = function(mode, key, result)
-        vim.api.nvim_buf_set_keymap(0, mode, key, "<cmd> " .. result .. "<cr>", {
+        vim.api.nvim_set_keymap(mode, key, "<cmd> " .. result .. "<cr>", {
             noremap = true,
             silent = true,
         })
